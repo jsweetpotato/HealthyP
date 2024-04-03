@@ -66,8 +66,18 @@ export function BookmarkPage() {
     })
   );
 
-  if (status === 'pending') return <SkeletonLargeCardComponent />;
-  if (status === 'error') return <SkeletonLargeCardComponent />;
+  if (status === 'pending')
+    return (
+      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
+        <SkeletonLargeCardComponent />
+      </div>
+    );
+  if (status === 'error')
+    return (
+      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
+        <SkeletonLargeCardComponent />
+      </div>
+    );
 
   return (
     <div className="w-full h-full bg-gray-200 overflow-auto">

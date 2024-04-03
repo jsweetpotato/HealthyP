@@ -21,8 +21,8 @@ export default function ResultComponent() {
   }, []);
 
   return (
-    <>
-      <div className="grid gap-4 grid-cols-2 justify-center w-full">
+    <div className="w-full h-full bg-gray-200 overflow-auto">
+      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
         {/* sessionData가 있을 경우 세션 데이터로 렌더링 */}
         {sessionData
           ? sessionData.map(({ title, id, expand, image }, idx) => {
@@ -43,7 +43,7 @@ export default function ResultComponent() {
               );
             })}
       </div>
-    </>
+    </div>
   );
 }
 
