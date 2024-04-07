@@ -39,6 +39,7 @@ import {
   SearchLayout,
   Notifications,
   CategoryPage,
+  // TodayRecipesPage,
 } from './pages/';
 import IntroPage from './pages/intro';
 import { isStore } from './stores/stores';
@@ -56,7 +57,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'main',
-        element: <MainPage />
+        element: <MainPage />,
+      },
+      {
+        path: '/오늘의 레시피',
+        element: <CategoryPage />,
       },
       {
         path: 'category/:title',
