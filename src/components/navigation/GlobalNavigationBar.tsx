@@ -148,7 +148,9 @@ export default function GlobalNavigationBar() {
       if (isAuth) {
         const currentUser = getCurrentUserData();
         if (currentUser.avatar) {
-          setProfileImageURL(getPbImage('users', currentUser.id, currentUser.avatar));
+          console.log(currentUser.avatar);
+          setProfileImageURL(getPbImage('_pb_users_auth_', currentUser.id, currentUser.avatar));
+          console.log(getPbImage('_pb_users_auth_', currentUser.id, currentUser.avatar));
         } else {
           setProfileImageURL(defaultProfile);
         }
