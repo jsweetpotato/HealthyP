@@ -9,3 +9,4 @@ export * from './detail';
 export * from './review';
 export * from './category';
 export * from './intro';
+export * from './SetPage';

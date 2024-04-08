@@ -8,6 +8,7 @@ const useUpdateProfile = (collection: string, id: string) => {
         const blobData = await fetchBlobFromUrl(data);
         const newData = new FormData();
         newData.append(item, blobData as string | Blob);
+        console.log(newData);
         await db.collection(collection).update(id, newData);
         return updateUserData;
       } else if (item === 'name') {
