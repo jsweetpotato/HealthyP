@@ -47,6 +47,7 @@ Health + Recipe
 | :-: | :-: | :-: | :-: |
 |최대한 리액터랑 친해지기|의미있는 코드 작성|최대한 이해하고 넘어가기|타입스크립트 능숙해지기|
 |[Github](https://github.com/asdfqaz74)|[Github](https://github.com/jsweetpotato)|[Github](https://github.com/lumpyspaceyz)|[Github](https://github.com/dldnlee)|
+|[Velog](https://velog.io/@k_ddaddi/posts)||[Velog](https://velog.io/@lumpyspaceyz/posts)||
 
 <br/>
 
