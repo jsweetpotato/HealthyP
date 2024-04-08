@@ -123,9 +123,6 @@ function StepContainer() {
                     </h2>
                     <p className="text-cap-1-em line-clamp-2">{item.description}</p>
                   </div>
-                  {/* <button className="border-l-2 w-50pxr h-full px-10pxr">
-                  <img src={move} alt="정렬" className="w-full" />
-                </button> */}
                 </motion.div>
                 <div
                   className="

@@ -39,7 +39,7 @@ import {
   SearchLayout,
   Notifications,
   CategoryPage,
-  // TodayRecipesPage,
+  SetPage,
 } from './pages/';
 import IntroPage from './pages/intro';
 import { isStore } from './stores/stores';
@@ -57,11 +57,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'main',
-        element: <MainPage />,
-      },
-      {
-        path: '/오늘의 레시피',
-        element: <CategoryPage />,
+        element: (
+          <SetPage>
+            <MainPage />
+          </SetPage>
+        ),
       },
       {
         path: 'category/:title',
@@ -69,13 +69,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'search',
-        element: <SearchLayout />,
+        element: (
+          <SetPage>
+            <SearchLayout />
+          </SetPage>
+        ),
       },
       {
         path: 'bookmark',
         element: (
           <ProtectedRoute>
-            <BookmarkPage />
+            <SetPage>
+              <BookmarkPage />
+            </SetPage>
           </ProtectedRoute>
         ),
       },
@@ -83,7 +89,9 @@ const router = createBrowserRouter([
         path: 'user',
         element: (
           <ProtectedRoute>
-            <UserLayout />
+            <SetPage>
+              <UserLayout />
+            </SetPage>
           </ProtectedRoute>
         ),
         children: [
