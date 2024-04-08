@@ -9,7 +9,7 @@ import { FormValues } from './create';
 import { FieldsetInput, TextInput, Selector, FileInput2 } from './components';
 import { Header, OneButtonModal, TwoButtonModal } from '@/components';
 import { useAtom } from 'jotai';
-import { category, description, difficulty, image2, ingredients, keywords, seasoning, title } from '@/stores/stores';
+import { category, description, difficulty, image2, ingredients, keywords, seasoning, title, time } from '@/stores/stores';
 
 export function CreateOne() {
   const navigate = useNavigate();
@@ -18,7 +18,8 @@ export function CreateOne() {
   const [titleField, setTitleField] = useAtom(title);
   const [categoryField, setCategory] = useAtom(category);
   const [keywordsField, setKeywords] = useAtom(keywords);
-  const [seasoningField, setSeasoningt] = useAtom(seasoning);
+  const [timeField, setTime] = useAtom(time);
+  const [seasoningField, setSeasoning] = useAtom(seasoning);
   const [difficultField, setDifficulty] = useAtom(difficulty);
   const [ingredientsField, setIngredient] = useAtom(ingredients);
   const [descriptionField, setDescription] = useAtom(description);
@@ -32,12 +33,13 @@ export function CreateOne() {
     defaultValues: {
       recipeMainImg: imageFile,
       recipeTitle: `${titleField || ''}`,
-      category: `${categoryField || ''}`,
+      recipeDesc: `${descriptionField || ''}`,
       keywords: `${keywordsField || ''}`,
-      seasoning: seasoningField,
+      time: `${timeField || ''}`,
+      category: `${categoryField || ''}`,
       difficult: `${difficultField || ''}`,
       ingredients: ingredientsField,
-      recipeDesc: `${descriptionField || ''}`,
+      seasoning: seasoningField,
     },
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -62,7 +64,8 @@ export function CreateOne() {
     setImageFile(data.recipeMainImg);
     setCategory(data.category);
     setKeywords(data.keywords);
-    setSeasoningt(data.seasoning);
+    setTime(data.time);
+    setSeasoning(data.seasoning);
     setDifficulty(data.difficult);
     setIngredient(data.ingredients);
     setDescription(data.recipeDesc.replace(/\n/g, '<br>'));
