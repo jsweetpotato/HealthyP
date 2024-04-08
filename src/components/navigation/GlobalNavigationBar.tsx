@@ -1,5 +1,5 @@
-import { SetStateAction, useAtomValue } from 'jotai';
-import { Dispatch, useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import home from '@/assets/icons/home.svg';
 import homeFill from '@/assets/icons/homeFill.svg';
@@ -14,7 +14,7 @@ import userFill from '@/assets/icons/personFill.svg';
 import { getCurrentUserData } from '@/util';
 import getPbImage from '@/util/data/getPBImage';
 import defaultProfile from '@/assets/images/defaultProfile.png';
-import { isStore } from '@/stores/stores';
+import { isStore, page } from '@/stores/stores';
 
 type RouteItem = {
   text: string;
@@ -89,22 +89,17 @@ type GNBButtonProps = {
   iconFill: string;
   text: string;
   currentPage: string;
-  setPage: Dispatch<SetStateAction<string>>;
 };
 
-function GNBButton({ route, icon, iconFill, text, currentPage, setPage }: GNBButtonProps) {
+function GNBButton({ route, icon, iconFill, text, currentPage}: GNBButtonProps) {
   const renderIcon = () => {
     if (currentPage === route) return iconFill;
     return icon;
   };
 
-  const handleClick = () => {
-    setPage(route);
-  };
-
   return (
     <li className="flex basis-full">
-      <Link to={route} onClick={handleClick} className={`h-full w-full flex justify-center items-center`}>
+      <Link to={route} className={`h-full w-full flex justify-center items-center`}>
         <img src={renderIcon()} alt="" className="w-30pxr h-30pxr rounded-full object-cover" />
         <p className="sr-only">{text}</p>
       </Link>
@@ -113,24 +108,20 @@ function GNBButton({ route, icon, iconFill, text, currentPage, setPage }: GNBBut
 }
 interface AuthGNBProps {
   profilePicture: string;
-  setPage: Dispatch<SetStateAction<string>>;
   currentPage: string;
 }
 
-function AuthGNB({ profilePicture, setPage, currentPage }: AuthGNBProps) {
+function AuthGNB({ profilePicture, currentPage }: AuthGNBProps) {
   return (
     <li className="flex basis-full">
       <Link
         to="user/recent"
-        onClick={() => {
-          setPage('user/recent');
-        }}
         className={`h-full w-full flex justify-center items-center`}
       >
         <img
           src={profilePicture}
           alt=""
-          className={`w-30pxr h-30pxr rounded-full object-cover ${currentPage === 'user/recent' ? 'border-2 border-black p-2pxr' : ''}`}
+          className={`w-30pxr h-30pxr rounded-full object-cover ${currentPage === '/user/recent' ? 'border-2 border-black p-2pxr' : ''}`}
         />
         <p className="sr-only">마이페이지</p>
       </Link>
@@ -139,7 +130,7 @@ function AuthGNB({ profilePicture, setPage, currentPage }: AuthGNBProps) {
 }
 
 export default function GlobalNavigationBar() {
-  const [currentPage, setCurrentPage] = useState<string>(window.location.pathname);
+  const currentPage = useAtomValue(page);
   const [profileImageURL, setProfileImageURL] = useState('');
   const isAuth = useAtomValue(isStore)
 
@@ -148,9 +139,7 @@ export default function GlobalNavigationBar() {
       if (isAuth) {
         const currentUser = getCurrentUserData();
         if (currentUser.avatar) {
-          console.log(currentUser.avatar);
           setProfileImageURL(getPbImage('_pb_users_auth_', currentUser.id, currentUser.avatar));
-          console.log(getPbImage('_pb_users_auth_', currentUser.id, currentUser.avatar));
         } else {
           setProfileImageURL(defaultProfile);
         }
@@ -164,13 +153,13 @@ export default function GlobalNavigationBar() {
       <ul className="flex flex-row list-none w-full h-full">
         {profileImageURL
           ? ROUTER_STATE_AUTH.map((item, idx) => {
-              return <GNBButton key={idx} currentPage={currentPage} setPage={setCurrentPage} {...item} />;
+              return <GNBButton key={idx} currentPage={currentPage} {...item} />;
             })
           : ROUTER_STATE.map((item, idx) => {
-              return <GNBButton key={idx} currentPage={currentPage} setPage={setCurrentPage} {...item} />;
+              return <GNBButton key={idx} currentPage={currentPage} {...item} />;
             })}
         {profileImageURL ? (
-          <AuthGNB profilePicture={profileImageURL} setPage={setCurrentPage} currentPage={currentPage} />
+          <AuthGNB profilePicture={profileImageURL} currentPage={currentPage} />
         ) : (
           <></>
         )}

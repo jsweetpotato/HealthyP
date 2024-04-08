@@ -58,3 +58,6 @@ export const userIdAtom = atom('');
 export const notificationDataAtom = atom<MyNotification[]>([]);
 export const deleteNotificationAtom = atom('');
 export const countNotificationAtom = atom<string>('');
+
+// GNB Navigator
+export const page = atom(window.location.pathname);

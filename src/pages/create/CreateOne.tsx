@@ -128,7 +128,6 @@ export function CreateOne() {
             register={register}
             required={false}
           />
-
           <Selector title="카테고리" id="category" optionList={categories} register={register} />
           <Selector title="난이도" id="difficult" optionList={difficult} register={register} />
           <FieldsetInput
