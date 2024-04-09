@@ -35,7 +35,7 @@ export function CategoryPage() {
     }
   }
 
-  const { data, status, isFetchingNextPage, userData, ref, isLoading } = useInifinityCard(getRecipeData);
+  const { data, status, isFetchingNextPage, userData, ref } = useInifinityCard(getRecipeData);
 
   const contents = data?.pages.map((recipes) =>
     recipes?.map((recipe, index) => {
@@ -91,7 +91,7 @@ export function CategoryPage() {
       </Helmet>
       <Header option="titleWithBack" title={title} />
       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        {isLoading ? <Skeleton /> : contents}
+        {contents}
         {isFetchingNextPage && <Skeleton />}
       </div>
     </div>
