@@ -3,7 +3,7 @@ import { Header, LargeCard, SkeletonLargeCard } from '@/components';
 import getPbImage from '@/util/data/getPBImage';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useInifinityCard } from '@/hooks/useInfinityCard';
+import { useInfinityCard } from '@/hooks/useInfinityCard';
 
 const Skeleton = () => {
   return (
@@ -35,7 +35,7 @@ export function CategoryPage() {
     }
   }
 
-  const { data, status, isFetchingNextPage, userData, ref } = useInifinityCard({
+  const { data, status, isFetchingNextPage, userData, ref } = useInfinityCard({
     callbackFn: getRecipeData,
     title: title || 'recipes',
   });

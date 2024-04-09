@@ -9,7 +9,7 @@ interface infinityCardProps {
   title: string;
 }
 
-export function useInifinityCard({ callbackFn, title }: infinityCardProps) {
+export function useInfinityCard({ callbackFn, title }: infinityCardProps) {
   const { ref, inView } = useInView({ threshold: 0.7 });
   const [userData, setUserData] = useState<RecordModel>();
 
