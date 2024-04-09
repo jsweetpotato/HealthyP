@@ -30,7 +30,9 @@ export function BookmarkPage() {
     return recordsData.items;
   };
 
-  const { data, status, isFetchingNextPage, userData, ref, isLoading } = useInifinityCard(getRecipeData);
+  const { data, status, isFetchingNextPage, userData, ref, isLoading } = useInifinityCard({
+    callbackFn: getRecipeData,
+  });
 
   const contents = data?.pages.map((recipes) =>
     recipes.map((recipe, index) => {

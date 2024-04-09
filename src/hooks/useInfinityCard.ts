@@ -4,12 +4,17 @@ import { RecordModel } from 'pocketbase';
 import { db } from '@/api/pocketbase';
 import { useInView } from 'react-intersection-observer';
 
-export function useInifinityCard(callbackFn: (pageParam: { pageParam: number | undefined }) => Promise<RecordModel[]>) {
+interface infinityCardProps {
+  callbackFn: (pageParam: { pageParam: number | undefined }) => Promise<RecordModel[]>;
+  title: string;
+}
+
+export function useInfinityCard({ callbackFn, title }: infinityCardProps) {
   const { ref, inView } = useInView({ threshold: 0.7 });
   const [userData, setUserData] = useState<RecordModel>();
 
   const { data, status, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ['recipes'],
+    queryKey: [title],
     queryFn: callbackFn,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
