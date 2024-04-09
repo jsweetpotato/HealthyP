@@ -35,7 +35,10 @@ export function CategoryPage() {
     }
   }
 
-  const { data, status, isFetchingNextPage, userData, ref } = useInifinityCard(getRecipeData);
+  const { data, status, isFetchingNextPage, userData, ref } = useInifinityCard({
+    callbackFn: getRecipeData,
+    title: title || 'recipes',
+  });
 
   const contents = data?.pages.map((recipes) =>
     recipes?.map((recipe, index) => {
