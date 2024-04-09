@@ -43,6 +43,7 @@ import {
 } from './pages/';
 import IntroPage from './pages/intro';
 import { isStore } from './stores/stores';
+import { TodayRecipesPage } from './pages/todayrecipes/TodayRecipesPage';
 
 const router = createBrowserRouter([
   // 루트 페이지 (메인)
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
             <MainPage />
           </SetPage>
         ),
+      },
+      {
+        path: 'todayrecipes',
+        element: <TodayRecipesPage />,
       },
       {
         path: 'category/:title',

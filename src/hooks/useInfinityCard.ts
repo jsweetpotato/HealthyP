@@ -29,7 +29,6 @@ export function useInifinityCard(callbackFn: (pageParam: { pageParam: number | u
     async function getUserData() {
       try {
         setIsLoading(true);
-        console.log(isLoading);
 
         const currentUser = localStorage.getItem('pocketbase_auth');
         if (currentUser === null) return;

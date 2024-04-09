@@ -71,7 +71,7 @@ export function MainPage() {
       <SwiperMain />
       <CategoryButtons />
       <section>
-        <Link to={'/오늘의 레시피'} className="flex pl-14pxr pr-10pxr py-10pxr text-title-2-em justify-between">
+        <Link to={'/todayrecipes'} className="flex pl-14pxr pr-10pxr py-10pxr text-title-2-em justify-between">
           <h2>오늘의 레시피</h2>
           <span className="size-30pxr bg-arrow-small-icon rotate-[270deg] bg-center"></span>
         </Link>
