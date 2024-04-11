@@ -17,10 +17,8 @@ const Skeleton = () => {
   );
 };
 
-export function TodayRecipesPage() {
+function TodayRecipesItems() {
   const [userData, setUserData] = useState<RecordModel>();
-  // const [isLoading, setIsLoading] = useState(true);
-
   const getRecipeData = useCallback(async () => {
     const recordsData = await db.collection('recipes').getList(1, 10, {
       expand: 'rating, profile',
@@ -87,6 +85,12 @@ export function TodayRecipesPage() {
       </div>
     );
 
+  return <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">{contents}</div>;
+}
+
+export function TodayRecipesPage() {
+  // const [isLoading, setIsLoading] = useState(true);
+
   // rendercount++;
 
   return (
@@ -95,7 +99,7 @@ export function TodayRecipesPage() {
         <title>HealthyP | 오늘의 레시피</title>
       </Helmet>
       <Header option="titleWithBack" title={'오늘의 레시피'} />
-      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">{contents}</div>
+      <TodayRecipesItems />
     </div>
   );
 }
