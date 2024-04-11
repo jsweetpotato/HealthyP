@@ -1,8 +1,7 @@
 import getPbImage from '@/util/data/getPBImage';
 import { db } from '@/api/pocketbase';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { ListResult, RecordModel } from 'pocketbase';
+import { useCallback } from 'react';
 import { SwiperMain, RecipeCard } from '@/components';
 import healthyFood from '@/assets/icons/healthy_food.png';
 import bulk from '@/assets/icons/bulk.png';
@@ -10,6 +9,7 @@ import diet from '@/assets/icons/diet.png';
 import vegan from '@/assets/icons/vegan.png';
 import foodDefaultImg from '@/assets/images/flower3.jpg';
 import { Helmet } from 'react-helmet-async';
+import { useQuery } from '@tanstack/react-query';
 
 const categories = [
   {
@@ -52,16 +52,16 @@ function CategoryButtons() {
 }
 
 export function MainPage() {
-  const [data, setData] = useState<ListResult<RecordModel>>();
-
-  useEffect(() => {
-    async function fetchData() {
-      const recipeData = await db.collection('recipes').getList(1, 10, { expand: 'rating', sort: '-views' });
-      setData(recipeData);
-    }
-    fetchData();
+  const getRecipeData = useCallback(async () => {
+    const recordsData = await db.collection('recipes').getList(1, 10, {
+      expand: 'rating, profile',
+      sort: '-views',
+    });
+    return recordsData?.items;
   }, []);
 
+  const { data, status } = useQuery({ queryKey: ['todayrecipes'], queryFn: getRecipeData });
+  if (status === 'pending') console.log('로딩중');
   return (
     <div className="overflow-y-scroll overflow-x-hidden h-full w-full pb-90pxr no-scrollbar">
       <Helmet>
@@ -77,8 +77,8 @@ export function MainPage() {
         </Link>
         <div className="w-full overflow-x-auto no-scrollbar">
           <div className="flex gap-2 px-side w-max pb-2">
-            {data?.items &&
-              data?.items.map(({ id, title, expand, image }) => {
+            {data &&
+              data?.map(({ id, title, expand, image }) => {
                 const url = getPbImage('recipes', id, image);
                 return (
                   <RecipeCard

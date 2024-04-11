@@ -19,6 +19,7 @@ const Skeleton = () => {
 
 function TodayRecipesItems() {
   const [userData, setUserData] = useState<RecordModel>();
+
   const getRecipeData = useCallback(async () => {
     const recordsData = await db.collection('recipes').getList(1, 10, {
       expand: 'rating, profile',
@@ -28,7 +29,6 @@ function TodayRecipesItems() {
   }, []);
 
   const { data, status } = useQuery({ queryKey: ['todayrecipes'], queryFn: getRecipeData });
-  console.log(status);
 
   const contents = data?.map((recipe, index) => {
     const url = getPbImage('recipes', recipe.id, recipe.image);
@@ -89,10 +89,6 @@ function TodayRecipesItems() {
 }
 
 export function TodayRecipesPage() {
-  // const [isLoading, setIsLoading] = useState(true);
-
-  // rendercount++;
-
   return (
     <div className="w-full h-full bg-gray-200 overflow-auto">
       <Helmet>
