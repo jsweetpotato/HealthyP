@@ -77,13 +77,13 @@ export function CategoryPage() {
   if (status === 'pending')
     return (
       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        <Skeleton />;
+        <Skeleton />
       </div>
     );
   if (status === 'error')
     return (
       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        <Skeleton />;
+        <Skeleton />
       </div>
     );
 
