@@ -8,10 +8,7 @@ interface BookmarkButtonProps {
   userData: RecordModel | undefined;
 }
 
-export default function BookmarkButton({
-  recipeId,
-  userData,
-}: BookmarkButtonProps) {
+export default function BookmarkButton({ recipeId, userData }: BookmarkButtonProps) {
   const [iconState, setIconState] = useState(false);
 
   useEffect(() => {
@@ -23,35 +20,25 @@ export default function BookmarkButton({
       }
     }
     updateIconState();
-  }, [recipeId, userData?.bookmark]);
+  }, [recipeId, userData]);
 
   async function triggerBookmark() {
     if (userData?.bookmark.includes(recipeId)) {
       const newData = { ...userData };
-      newData.bookmark = newData.bookmark.filter(
-        (item: string) => item !== recipeId
-      );
+      newData.bookmark = newData.bookmark.filter((item: string) => item !== recipeId);
       await db.collection('users').update(userData.id, newData);
-      console.log('false');
       setIconState(false);
-    } else if (
-      !userData?.bookmark.includes(recipeId) &&
-      userData?.id !== undefined
-    ) {
+    } else if (!userData?.bookmark.includes(recipeId) && userData?.id !== undefined) {
       const newData = { ...userData };
       newData?.bookmark.push(recipeId);
       await db.collection('users').update(userData.id, newData);
-      console.log('true');
       setIconState(true);
     }
   }
 
   return (
     <>
-      <FnButton
-        image={iconState ? 'bookmarkFill' : 'bookmark'}
-        clickHandler={triggerBookmark}
-      />
+      <FnButton image={iconState ? 'bookmarkFill' : 'bookmark'} clickHandler={triggerBookmark} />
     </>
   );
 }

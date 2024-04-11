@@ -1,5 +1,5 @@
 import { db } from '@/api/pocketbase';
-import { DefaultLoader, Header, LargeCard, TwoButtonModal } from '@/components';
+import { Header, LargeCard, SkeletonLargeCard, TwoButtonModal } from '@/components';
 import useNotificationData from '@/hooks/useNotificationData';
 import useProfileData from '@/hooks/useProfileData';
 import { isStore, myRecipesAtom } from '@/stores/stores';
@@ -10,63 +10,84 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Profile from './components/Profile';
 import Tab from './components/Tab';
+import { UsersResponse } from '@/types';
+
+interface SkeletonProps {
+  profile: UsersResponse;
+}
+const SkeletonLargeCardComponent = ({ profile }: SkeletonProps) => {
+  if (profile === undefined) {
+    return (
+      <>
+        <SkeletonLargeCard useProfile={false} />
+        <SkeletonLargeCard useProfile={false} />
+      </>
+    );
+  }
+};
 
 const MyRecipesContainer = () => {
   const { id } = useProfileData();
   const [myRecipes, setMyRecipes] = useAtom(myRecipesAtom);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
-        const recipeData = await db
-          .collection('recipes')
-          .getFullList({
-            filter: `profile = "${id}"`,
-            sort: '-created',
-          })
-          .then((data) => data)
-          .catch((err) => {
-            if (!err.isAbort) {
-              console.warn('non cancellation error:', err);
-            }
-            return undefined;
-          });
+        try {
+          setIsLoading(true);
+          const recipeData = await db
+            .collection('recipes')
+            .getFullList({
+              filter: `profile = "${id}"`,
+              sort: '-created',
+            })
+            .then((data) => data)
+            .catch((err) => {
+              if (!err.isAbort) {
+                console.warn('non cancellation error:', err);
+              }
+              return undefined;
+            });
 
-        setMyRecipes(recipeData ?? []);
+          setMyRecipes(recipeData ?? []);
+        } finally {
+          setIsLoading(false);
+        }
       };
 
       fetchData();
     }
-  }, [id, setMyRecipes]);
+  }, [id, setMyRecipes, setIsLoading]);
 
   return (
     <>
-      {myRecipes ? (
-        <div className="pb-140pxr">
-          <div className="grid gap-6pxr grid-cols-card justify-center w-full bg-gray-200">
-            {myRecipes.map((data: RecordModel, idx: number) => {
-              if (data) {
-                const url = getPbImage('recipes', data.id, data.image);
-                return (
-                  <LargeCard
-                    key={idx}
-                    id={data.id}
-                    userData={data}
-                    rating={data.expand?.rating}
-                    url={data.image && url}
-                    desc={data.desc}
-                    title={data.title}
-                    profile={data.expand?.profile}
-                    keywords={data.keywords}
-                  />
-                );
-              }
-            })}
-          </div>
+      <div className="pb-140pxr">
+        <div className="grid gap-6pxr grid-cols-card justify-center w-full bg-gray-200">
+          {!isLoading
+            ? myRecipes.map((data: RecordModel, idx: number) => {
+                if (data) {
+                  const url = getPbImage('recipes', data.id, data.image);
+                  return (
+                    <LargeCard
+                      key={idx}
+                      id={data.id}
+                      userData={data}
+                      rating={data.expand?.rating}
+                      url={data.image && url}
+                      desc={data.desc}
+                      title={data.title}
+                      profile={data.expand?.profile}
+                      keywords={data.keywords}
+                    />
+                  );
+                }
+              })
+            : myRecipes.map((data: RecordModel, idx: number) => {
+                return <SkeletonLargeCardComponent key={idx} profile={data.expand?.profile} />;
+              })}
         </div>
-      ) : (
-        <DefaultLoader />
-      )}
+      </div>
     </>
   );
 };

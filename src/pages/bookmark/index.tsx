@@ -4,7 +4,7 @@ import { LargeCard, SkeletonLargeCard } from '@/components';
 import getPbImage from '@/util/data/getPBImage';
 import { getCurrentUserData } from '@/util';
 import { Helmet } from 'react-helmet-async';
-import { useInifinityCard } from '@/hooks/useInfinityCard';
+import { useInfinityCard } from '@/hooks/useInfinityCard';
 
 function SkeletonLargeCardComponent() {
   return (
@@ -30,7 +30,10 @@ export function BookmarkPage() {
     return recordsData.items;
   };
 
-  const { data, status, isFetchingNextPage, userData, ref, isLoading } = useInifinityCard(getRecipeData);
+  const { data, status, isFetchingNextPage, userData, ref } = useInfinityCard({
+    callbackFn: getRecipeData,
+    title: 'recipes',
+  });
 
   const contents = data?.pages.map((recipes) =>
     recipes.map((recipe, index) => {
@@ -84,11 +87,9 @@ export function BookmarkPage() {
       <Helmet>
         <title>HealthyP | 북마크</title>
       </Helmet>
-      {isLoading ? (
-        <SkeletonLargeCardComponent />
-      ) : (
-        <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">{contents}</div>
-      )}
+
+      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">{contents}</div>
+
       {isFetchingNextPage && <SkeletonLargeCard />}
     </div>
   );

@@ -33,7 +33,7 @@ export function UserProfile({ profile }: profileProps) {
   return (
     <>
       <img src={url} alt="" className="size-30pxr bg-gray_400 rounded-[30px]" />
-      <p className="ml-4pxr mr-auto text-sub-em">{profile.name}</p>
+      <p className="ml-10pxr mr-auto text-sub-em">{profile.name}</p>
     </>
   );
 }
