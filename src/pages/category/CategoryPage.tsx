@@ -14,25 +14,15 @@ const Skeleton = () => {
   );
 };
 
-export function CategoryPage() {
-  const { title } = useParams();
-
+function CategoryItems({ title }: { title: string | undefined }) {
   async function getRecipeData({ pageParam = 1 }) {
-    if (title === '오늘의 레시피') {
-      const recordsData = await db.collection('recipes').getList(pageParam, 6, {
-        expand: 'rating, profile',
-        sort: '-views',
-      });
-      return recordsData.items;
-    } else {
-      const recordsData = await db.collection('recipes').getList(pageParam, 5, {
-        expand: 'rating, profile',
-        filter: `category = "${title}"`,
-        sort: '-created',
-      });
+    const recordsData = await db.collection('recipes').getList(pageParam, 5, {
+      expand: 'rating, profile',
+      filter: `category = "${title}"`,
+      sort: '-created',
+    });
 
-      return recordsData?.items;
-    }
+    return recordsData?.items;
   }
 
   const { data, status, isFetchingNextPage, userData, ref } = useInfinityCard({
@@ -77,15 +67,27 @@ export function CategoryPage() {
   if (status === 'pending')
     return (
       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        <Skeleton />;
+        <Skeleton />
       </div>
     );
+
   if (status === 'error')
     return (
       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        <Skeleton />;
+        <Skeleton />
       </div>
     );
+
+  return (
+    <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
+      {contents}
+      {isFetchingNextPage && <Skeleton />}
+    </div>
+  );
+}
+
+export function CategoryPage() {
+  const { title } = useParams();
 
   return (
     <div className="w-full h-full bg-gray-200 overflow-auto">
@@ -93,10 +95,7 @@ export function CategoryPage() {
         <title>HealthyP | {title}</title>
       </Helmet>
       <Header option="titleWithBack" title={title} />
-      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        {contents}
-        {isFetchingNextPage && <Skeleton />}
-      </div>
+      <CategoryItems title={title} />
     </div>
   );
 }
