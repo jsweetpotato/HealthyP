@@ -118,7 +118,7 @@ function AuthGNB({ profilePicture, currentPage }: AuthGNBProps) {
         <img
           src={profilePicture}
           alt=""
-          className={`w-30pxr h-30pxr rounded-full object-cover ${currentPage === '/user/recent' ? 'border-2 border-black p-2pxr' : ''}`}
+          className={`w-30pxr h-30pxr rounded-full object-cover ${currentPage === '/user/recent' ? 'border-2 border-white p-2pxr' : ''}`}
         />
         <p className="sr-only">마이페이지</p>
       </Link>
@@ -147,7 +147,7 @@ export default function GlobalNavigationBar() {
 
   return (
     <nav className="fixed bottom-0 w-full h-60pxr px-side bg-primary max-w-1300pxr z-20">
-      <ul className="flex flex-row list-none w-full h-full invert">
+      <ul className="flex flex-row list-none w-full h-full ">
         {profileImageURL
           ? ROUTER_STATE_AUTH.map((item, idx) => {
               return <GNBButton key={idx} currentPage={currentPage} {...item} />;
