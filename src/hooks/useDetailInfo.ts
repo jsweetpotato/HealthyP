@@ -16,10 +16,11 @@ export function useDetailInfo(recipeId: string | undefined) {
         expand: 'rating',
       });
       const url = db.files.getUrl(record, record.image);
-      await db.collection('recipes').update(recipeId, {'views' : (record.views + 1)});
+      await db.collection('recipes').update(recipeId, { views: record.views + 1 });
       setImageURL(url);
       setRecipeData(record);
     }
+
     function handleScroll() {
       const scrollPosition = window.scrollY;
       const threshold = 100;
@@ -31,9 +32,7 @@ export function useDetailInfo(recipeId: string | undefined) {
     }
     async function getUserData() {
       const userId = getCurrentUserData().id;
-      const response = await db
-        .collection('users')
-        .getOne(userId, { requestKey: null });
+      const response = await db.collection('users').getOne(userId, { requestKey: null });
       if (response === undefined) return;
       setUserData(response);
     }
