@@ -17,9 +17,8 @@ const Skeleton = () => {
   );
 };
 
-export function TodayRecipesPage() {
+function TodayRecipesItems() {
   const [userData, setUserData] = useState<RecordModel>();
-  // const [isLoading, setIsLoading] = useState(true);
 
   const getRecipeData = useCallback(async () => {
     const recordsData = await db.collection('recipes').getList(1, 10, {
@@ -30,7 +29,6 @@ export function TodayRecipesPage() {
   }, []);
 
   const { data, status } = useQuery({ queryKey: ['todayrecipes'], queryFn: getRecipeData });
-  console.log(status);
 
   const contents = data?.map((recipe, index) => {
     const url = getPbImage('recipes', recipe.id, recipe.image);
@@ -87,15 +85,17 @@ export function TodayRecipesPage() {
       </div>
     );
 
-  // rendercount++;
+  return <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">{contents}</div>;
+}
 
+export function TodayRecipesPage() {
   return (
     <div className="w-full h-full bg-gray-200 overflow-auto">
       <Helmet>
         <title>HealthyP | 오늘의 레시피</title>
       </Helmet>
       <Header option="titleWithBack" title={'오늘의 레시피'} />
-      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">{contents}</div>
+      <TodayRecipesItems />
     </div>
   );
 }

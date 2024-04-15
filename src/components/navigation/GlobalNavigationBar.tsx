@@ -91,7 +91,7 @@ type GNBButtonProps = {
   currentPage: string;
 };
 
-function GNBButton({ route, icon, iconFill, text, currentPage}: GNBButtonProps) {
+function GNBButton({ route, icon, iconFill, text, currentPage }: GNBButtonProps) {
   const renderIcon = () => {
     if (currentPage === route) return iconFill;
     return icon;
@@ -114,14 +114,11 @@ interface AuthGNBProps {
 function AuthGNB({ profilePicture, currentPage }: AuthGNBProps) {
   return (
     <li className="flex basis-full">
-      <Link
-        to="user/recent"
-        className={`h-full w-full flex justify-center items-center`}
-      >
+      <Link to="user/recent" className={`h-full w-full flex justify-center items-center`}>
         <img
           src={profilePicture}
           alt=""
-          className={`w-30pxr h-30pxr rounded-full object-cover ${currentPage === '/user/recent' ? 'border-2 border-black p-2pxr' : ''}`}
+          className={`w-30pxr h-30pxr rounded-full object-cover invert ${currentPage === '/user/recent' ? 'border-2 border-white p-2pxr' : ''}`}
         />
         <p className="sr-only">마이페이지</p>
       </Link>
@@ -132,7 +129,7 @@ function AuthGNB({ profilePicture, currentPage }: AuthGNBProps) {
 export default function GlobalNavigationBar() {
   const currentPage = useAtomValue(page);
   const [profileImageURL, setProfileImageURL] = useState('');
-  const isAuth = useAtomValue(isStore)
+  const isAuth = useAtomValue(isStore);
 
   useEffect(() => {
     async function getUserProfilePicture() {
@@ -149,8 +146,8 @@ export default function GlobalNavigationBar() {
   }, [isAuth]);
 
   return (
-    <nav className="fixed bottom-0 w-full h-80pxr px-side pb-24pxr bg-white max-w-1300pxr z-20">
-      <ul className="flex flex-row list-none w-full h-full">
+    <nav className="fixed bottom-0 w-full h-60pxr px-side bg-primary max-w-1300pxr z-20">
+      <ul className="flex flex-row list-none w-full h-full invert">
         {profileImageURL
           ? ROUTER_STATE_AUTH.map((item, idx) => {
               return <GNBButton key={idx} currentPage={currentPage} {...item} />;
@@ -158,11 +155,7 @@ export default function GlobalNavigationBar() {
           : ROUTER_STATE.map((item, idx) => {
               return <GNBButton key={idx} currentPage={currentPage} {...item} />;
             })}
-        {profileImageURL ? (
-          <AuthGNB profilePicture={profileImageURL} currentPage={currentPage} />
-        ) : (
-          <></>
-        )}
+        {profileImageURL ? <AuthGNB profilePicture={profileImageURL} currentPage={currentPage} /> : <></>}
       </ul>
     </nav>
   );
