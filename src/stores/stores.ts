@@ -61,3 +61,6 @@ export const countNotificationAtom = atom<string>('');
 
 // GNB Navigator
 export const page = atom(window.location.pathname);
+
+// 1등 레시피
+export const top_recipe = atom<RecordModel>({});
