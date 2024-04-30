@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { RecordModel } from 'pocketbase';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import getPbImage from '@/util/data/getPBImage';
 import { RatingsResponse, UsersResponse } from '@/types';
 import { Ref } from 'react';
@@ -14,14 +15,16 @@ import { motion } from 'framer-motion';
 
 // let rendercount = 0;
 
-const Skeleton = () => {
-  return (
-    <>
-      <SkeletonLargeCard />
-      <SkeletonLargeCard />
-    </>
-  );
-};
+// const Skeleton = () => {
+//   return (
+//     <>
+//       <SkeletonLargeCard />
+//       <SkeletonLargeCard />
+//     </>
+//   );
+// };
+
+
 interface profileProps {
   profile?: UsersResponse;
   profileImg?: string;
@@ -39,15 +42,49 @@ export interface LargeCardProps extends profileProps {
   index: number;
 }
 
+interface RecipeCardSkeletonProps {
+  index: number;
+}
+
+function RecipeCardSkeleton({index} : RecipeCardSkeletonProps) {
+  return (
+    <div className='w-full p-3 flex bg-white shadow-lg justify-center items-center rounded-lg gap-2'>
+      <p className='w-80pxr text-center font-bold text-xl'>{index + 1}등</p>
+      <div className='h-full w-2pxr mx-10pxr bg-gray-400'></div>
+      <div className='w-80pxr h-80pxr min-w-80pxr bg-gray_400 skeleton rounded-lg'></div>
+      <div className='w-full'>
+        <div className='w-100pxr h-20pxr mb-5pxr skeleton bg-gray_400'></div>
+        <div className='w-100pxr h-20pxr mb-5pxr skeleton bg-gray_400'></div>
+        <div className='w-100pxr h-20pxr mb-5pxr skeleton bg-gray_400'></div>
+      </div>
+    </div>
+  )
+}
+
+function Skeleton() {
+  return (
+    <>
+      {
+        [...Array(10)].map((_, index) => {
+          return (
+            <RecipeCardSkeleton key={index} index={index}/>
+          )
+        })
+      }
+    </>
+  )
+}
+
 function RecipeCard({
   rating,
+  id,
   url,
   title,
   profile,
   index
   } : LargeCardProps) {
   return (
-    <div className='w-full p-3 flex bg-white shadow-lg justify-center items-center rounded-lg gap-2'>
+    <Link to={`/detail/${id}`} className='w-full p-3 flex bg-white shadow-lg justify-center items-center rounded-lg gap-2'>
       <p className='w-80pxr text-center font-bold text-xl'>{index+1}등</p>
       <div className='h-full w-2pxr mx-10pxr bg-gray-400'></div>
       <img src={url} alt="" className='size-80pxr min-w-80pxr object-cover object-center rounded-lg'/>
@@ -56,7 +93,7 @@ function RecipeCard({
         <h2 className='text-md font-semibold line-clamp-1'>{title}</h2>
         <Star rating={rating} />
       </div>
-    </div>
+    </Link>
   )
 }
 
@@ -138,6 +175,8 @@ export function TodayRecipesPage() {
   const topRecipe = useAtomValue(top_recipe);
   const [imageUrl, setImageUrl] = useState('');
 
+  
+
   useEffect(() => {
     const url = getPbImage('recipes', topRecipe.id, topRecipe.image);
     setImageUrl(url);
@@ -149,7 +188,7 @@ export function TodayRecipesPage() {
         <title>HealthyP | 오늘의 레시피</title>
       </Helmet>
       <Header option="onlyArrow" />
-      <div className='w-full pt-4 pb-10 flex flex-col items-center gap-5'>
+      <div className='w-full h-1/3 flex flex-col items-center gap-5'>
         <p className='text-3xl font-extrabold'>오늘의 레시피</p>
         <motion.div 
           initial={{y: 40}}
