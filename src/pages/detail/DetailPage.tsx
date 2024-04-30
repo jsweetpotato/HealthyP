@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDetailInfo } from '@/hooks/useDetailInfo';
@@ -16,6 +16,19 @@ const dummyData = [
 ];
 
 export function DetailPage() {
+  const [, setScrollY] = useState(0);
+
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    const header = document.querySelector('header');
+    scrollY > 200 ? header?.classList.add('bg-white') : header?.classList.remove('bg-white');
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  });
   const navigate = useNavigate();
   const { recipeId } = useParams();
   const isLogin = localStorage.getItem('pocketbase_auth');
@@ -37,7 +50,7 @@ export function DetailPage() {
 
   return (
     <div className="relative h-full">
-      <motion.header className="w-full max-w-1300pxr px-10pxr py-12pxr flex items-center justify-between z-10 fixed">
+      <motion.header className="header w-full max-w-1300pxr px-10pxr py-12pxr flex items-center justify-between z-10 fixed">
         <FnButton image={'arrowBig'} clickHandler={() => navigate(-1)} />
         <BookmarkButton recipeId={recipeId} userData={userData} />
       </motion.header>

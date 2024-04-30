@@ -146,7 +146,7 @@ export default function GlobalNavigationBar() {
   }, [isAuth]);
 
   return (
-    <nav className="fixed bottom-0 w-full h-60pxr px-side bg-primary max-w-1300pxr z-20">
+    <nav className="fixed bottom-0 w-full h-60pxr px-side bg-primary max-w-1300pxr z-20 ">
       <ul className="flex flex-row list-none w-full h-full invert">
         {profileImageURL
           ? ROUTER_STATE_AUTH.map((item, idx) => {
