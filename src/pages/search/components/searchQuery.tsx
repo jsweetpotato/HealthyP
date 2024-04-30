@@ -24,7 +24,7 @@ function SearchQueryComponent() {
     data: allRecipes,
     isError,
     isLoading,
-  } = useQuery<RecipesRatingExpand[]>({ queryKey: ['recipes'], queryFn: fetchRecipes, staleTime: 1000 * 30 });
+  } = useQuery<RecipesRatingExpand[]>({ queryKey: ['searchRecipes'], queryFn: fetchRecipes, staleTime: 1000 * 30 });
 
   // 검색 결과를 필터링합니다.
   const filteredQuery =
