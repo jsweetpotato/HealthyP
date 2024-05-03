@@ -1,5 +1,5 @@
 import { db } from '@/api/pocketbase';
-import { Header, Star, SkeletonLargeCard } from '@/components';
+import { Header, Star } from '@/components';
 import { Helmet } from 'react-helmet-async';
 import { RecordModel } from 'pocketbase';
 import { useQuery } from '@tanstack/react-query';
