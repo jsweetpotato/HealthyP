@@ -1,3 +1,4 @@
+import { recipeMainIntroductionProps } from '@/pages/create/create';
 import { RecipesRatingExpand, MyNotification, MyReview } from '@/types';
 import { atom } from 'jotai';
 import { RecordModel } from 'pocketbase';
@@ -29,6 +30,9 @@ export const step_images = atom<File[]>([]);
 export const time = atom(0); // 조리 시간
 export const difficulty = atom('쉬움'); // 난이도 선택
 export const modalError = atom(false); // 에러 발생 여부
+
+// 생성 페이지 atom 2
+export const recipeMainIntroductionAtom = atom();
 
 // 로그인 페이지
 export const isStore = atom(false); // 로컬저장소에 pocketbase_auth가 있는지 여부

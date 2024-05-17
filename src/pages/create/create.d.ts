@@ -44,3 +44,16 @@ export type FieldError = {
 };
 
 export type FormValues = z.infer<typeof schema>;
+
+export interface recipeMainIntroductionProps {
+  image: FileList | null;
+  title: string;
+  description: string;
+  keywords: string;
+  time: number;
+  category?: string;
+  difficulty: '쉬움' | '보통' | '어려움';
+  ingredients: [];
+  seasoning: [];
+  nutrition: string | null;
+}
