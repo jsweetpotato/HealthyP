@@ -1,15 +1,12 @@
 import { db } from '@/api/pocketbase';
-import { Header, LargeCard, SkeletonLargeCard } from '@/components';
+import { LargeCard, SkeletonLargeCard } from '@/components';
 import getPbImage from '@/util/data/getPBImage';
-import { useParams, Link, Outlet } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useParams, Link } from 'react-router-dom';
 import { useInfinityCard } from '@/hooks/useInfinityCard';
 import healthyFood from '@/assets/icons/healthy_food.png';
 import bulk from '@/assets/icons/bulk.png';
 import diet from '@/assets/icons/diet.png';
 import vegan from '@/assets/icons/vegan.png';
-import { Dispatch, useEffect, useState } from 'react';
-import { State } from 'react-beautiful-dnd';
 
 const Skeleton = () => {
   return (
@@ -19,6 +16,7 @@ const Skeleton = () => {
     </>
   );
 };
+
 
 const categories = [
   {
@@ -39,34 +37,26 @@ const categories = [
   },
 ];
 
-
-interface CategoryButtonsProps {
-  buttonState : string
-}
-
-function CategoryButtons({buttonState} : CategoryButtonsProps) {
-
-
-
-  return (
-    <div className="w-full flex py-10pxr justify-between">
-      {categories.map((item) => {
-        return (
-          <Link
-            key={item.label}
-            to={`/category/${item.label}`}
-            className="h-74pxr w-60pxr flex flex-col items-center gap-4pxr"
-          >
-            <div className={`size-50pxr flex justify-center items-center rounded-full border ${buttonState == item.label ? 'border-primary border-2' : ''} hover:bg-gray-200`}>
-              <img src={item.image} alt={item.label} className="size-32pxr" />
-            </div>
-            <h2 className="text-foot">{item.label}</h2>
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
+// function CategoryButtons() {
+//   return (
+//     <div className="w-full flex py-10pxr">
+//       {categories.map((item) => {
+//         return (
+//           <Link
+//             key={item.label}
+//             to={`/category/${item.label}`}
+//             className="h-74pxr w-60pxr flex flex-col items-center gap-4pxr"
+//           >
+//             <div className="size-50pxr flex justify-center items-center rounded-full border hover:bg-gray-200">
+//               <img src={item.image} alt={item.label} className="size-32pxr" />
+//             </div>
+//             <h2 className="text-foot">{item.label}</h2>
+//           </Link>
+//         );
+//       })}
+//     </div>
+//   );
+// }
 
 
 function CategoryItems({ title }: { title: string | undefined }) {
@@ -141,30 +131,13 @@ function CategoryItems({ title }: { title: string | undefined }) {
   );
 }
 
-export function CategoryPage() {
+export function CategoryList() {
   const { title } = useParams();
-  const [buttonState, setButtonState] = useState('');
-
-  useEffect(() => {
-    if(title === undefined) return;
-    setButtonState(title)
-  }, [title])
 
   return (
-    <div className="w-full h-full bg-gray-200 overflow-auto relative no-scrollbar">
-      <Helmet>
-        <title>HealthyP | {title}</title>
-      </Helmet>
-      <Header option="onlyArrow"/>
-      <div className='w-full py-2 bg-white px-5 flex flex-col gap-2'>
-        <p className='text-foot text-gray-500'>안녕하세요, 이은원님!</p>
-        <p className='text-title-2-em'>집에서도 다양한 <br/>요리를 경험해봐요!</p>
-        <input type="text" className='w-full bg-gray-200 py-2 rounded-full'/>
-        <CategoryButtons buttonState={buttonState} />
-      </div>
-      <div className='w-full sticky top-0'>
-        <Outlet />
-      </div>
+    <div className="w-full h-full bg-white overflow-auto z-1000">
+      <h1 className='text-title-2-em p-3'>{title}</h1>
+      <CategoryItems title={title} />
     </div>
   );
 }
