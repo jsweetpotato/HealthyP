@@ -40,6 +40,7 @@ import {
   Notifications,
   CategoryPage,
   SetPage,
+  CategoryList
 } from './pages/';
 import IntroPage from './pages/intro';
 import { isStore } from './stores/stores';
@@ -69,8 +70,14 @@ const router = createBrowserRouter([
         element: <TodayRecipesPage />,
       },
       {
-        path: 'category/:title',
+        path: 'category',
         element: <CategoryPage />,
+        children: [
+          {
+            path: ':title',
+            element: <CategoryList />
+          }
+        ]
       },
       {
         path: 'search',
