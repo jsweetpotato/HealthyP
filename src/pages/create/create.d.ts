@@ -19,6 +19,7 @@ export interface FieldsetInputProps {
   control: Control<FormValues>;
   register: UseFormRegister<FormValues>;
   getValues: UseFormGetValues<FormValues>;
+  error?: FieldErrors<z.infer<unknown>>;
 }
 
 export interface SelectorProps {

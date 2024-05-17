@@ -9,7 +9,17 @@ import { FormValues } from './create';
 import { FieldsetInput, TextInput, Selector, FileInput2 } from './components';
 import { Header, OneButtonModal, TwoButtonModal } from '@/components';
 import { useAtom } from 'jotai';
-import { category, description, difficulty, image2, ingredients, keywords, seasoning, title, time } from '@/stores/stores';
+import {
+  category,
+  description,
+  difficulty,
+  image2,
+  ingredients,
+  keywords,
+  seasoning,
+  title,
+  time,
+} from '@/stores/stores';
 
 export function CreateOne() {
   const navigate = useNavigate();
@@ -117,7 +127,6 @@ export function CreateOne() {
             error={errors.keywords}
             registerName="keywords"
             register={register}
-            required={false}
           />
           <TextInput
             type="number"
@@ -129,7 +138,6 @@ export function CreateOne() {
             error={errors.time}
             registerName="time"
             register={register}
-            required={false}
           />
           <Selector title="카테고리" id="category" optionList={categories} register={register} />
           <Selector title="난이도" id="difficult" optionList={difficult} register={register} />
@@ -139,6 +147,7 @@ export function CreateOne() {
             control={control}
             getValues={getValues}
             register={register}
+            error={errors.ingredients}
             required
           />
           <FieldsetInput title="양념" id="seasoning" control={control} getValues={getValues} register={register} />
