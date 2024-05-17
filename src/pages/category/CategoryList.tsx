@@ -1,12 +1,12 @@
 import { db } from '@/api/pocketbase';
 import { LargeCard, SkeletonLargeCard } from '@/components';
 import getPbImage from '@/util/data/getPBImage';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useInfinityCard } from '@/hooks/useInfinityCard';
-import healthyFood from '@/assets/icons/healthy_food.png';
-import bulk from '@/assets/icons/bulk.png';
-import diet from '@/assets/icons/diet.png';
-import vegan from '@/assets/icons/vegan.png';
+// import healthyFood from '@/assets/icons/healthy_food.png';
+// import bulk from '@/assets/icons/bulk.png';
+// import diet from '@/assets/icons/diet.png';
+// import vegan from '@/assets/icons/vegan.png';
 
 const Skeleton = () => {
   return (
@@ -18,24 +18,24 @@ const Skeleton = () => {
 };
 
 
-const categories = [
-  {
-    label: '건강식',
-    image: healthyFood,
-  },
-  {
-    label: '다이어트',
-    image: diet,
-  },
-  {
-    label: '벌크업',
-    image: bulk,
-  },
-  {
-    label: '비건',
-    image: vegan,
-  },
-];
+// const categories = [
+//   {
+//     label: '건강식',
+//     image: healthyFood,
+//   },
+//   {
+//     label: '다이어트',
+//     image: diet,
+//   },
+//   {
+//     label: '벌크업',
+//     image: bulk,
+//   },
+//   {
+//     label: '비건',
+//     image: vegan,
+//   },
+// ];
 
 // function CategoryButtons() {
 //   return (

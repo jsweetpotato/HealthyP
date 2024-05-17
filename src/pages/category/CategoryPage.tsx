@@ -1,24 +1,21 @@
-import { db } from '@/api/pocketbase';
-import { Header, LargeCard, SkeletonLargeCard } from '@/components';
-import getPbImage from '@/util/data/getPBImage';
+import { Header } from '@/components';
 import { useParams, Link, Outlet } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useInfinityCard } from '@/hooks/useInfinityCard';
 import healthyFood from '@/assets/icons/healthy_food.png';
 import bulk from '@/assets/icons/bulk.png';
 import diet from '@/assets/icons/diet.png';
 import vegan from '@/assets/icons/vegan.png';
-import { Dispatch, useEffect, useState } from 'react';
-import { State } from 'react-beautiful-dnd';
+import { useEffect, useState } from 'react';
+// import { State } from 'react-beautiful-dnd';
 
-const Skeleton = () => {
-  return (
-    <>
-      <SkeletonLargeCard />
-      <SkeletonLargeCard />
-    </>
-  );
-};
+// const Skeleton = () => {
+//   return (
+//     <>
+//       <SkeletonLargeCard />
+//       <SkeletonLargeCard />
+//     </>
+//   );
+// };
 
 const categories = [
   {
@@ -69,77 +66,77 @@ function CategoryButtons({buttonState} : CategoryButtonsProps) {
 }
 
 
-function CategoryItems({ title }: { title: string | undefined }) {
-  async function getRecipeData({ pageParam = 1 }) {
-    const recordsData = await db.collection('recipes').getList(pageParam, 5, {
-      expand: 'rating, profile',
-      filter: `category = "${title}"`,
-      sort: '-created',
-    });
+// function CategoryItems({ title }: { title: string | undefined }) {
+//   async function getRecipeData({ pageParam = 1 }) {
+//     const recordsData = await db.collection('recipes').getList(pageParam, 5, {
+//       expand: 'rating, profile',
+//       filter: `category = "${title}"`,
+//       sort: '-created',
+//     });
 
-    return recordsData?.items;
-  }
+//     return recordsData?.items;
+//   }
 
-  const { data, status, isFetchingNextPage, userData, ref } = useInfinityCard({
-    callbackFn: getRecipeData,
-    title: title || 'recipes',
-  });
+//   const { data, status, isFetchingNextPage, userData, ref } = useInfinityCard({
+//     callbackFn: getRecipeData,
+//     title: title || 'recipes',
+//   });
 
-  const contents = data?.pages.map((recipes) =>
-    recipes?.map((recipe, index) => {
-      const url = getPbImage('recipes', recipe.id, recipe.image);
-      if (recipes?.length === index + 1)
-        return (
-          <LargeCard
-            innerRef={ref}
-            key={index}
-            id={recipe.id}
-            userData={userData}
-            rating={recipe.expand?.rating}
-            url={recipe.image && url}
-            desc={recipe.desc}
-            title={recipe.title}
-            profile={recipe.expand?.profile}
-            keywords={recipe.keywords}
-          />
-        );
-      return (
-        <LargeCard
-          key={index}
-          id={recipe.id}
-          userData={userData}
-          rating={recipe.expand?.rating}
-          url={recipe.image && url}
-          desc={recipe.desc}
-          title={recipe.title}
-          profile={recipe.expand?.profile}
-          keywords={recipe.keywords}
-        />
-      );
-    })
-  );
+//   const contents = data?.pages.map((recipes) =>
+//     recipes?.map((recipe, index) => {
+//       const url = getPbImage('recipes', recipe.id, recipe.image);
+//       if (recipes?.length === index + 1)
+//         return (
+//           <LargeCard
+//             innerRef={ref}
+//             key={index}
+//             id={recipe.id}
+//             userData={userData}
+//             rating={recipe.expand?.rating}
+//             url={recipe.image && url}
+//             desc={recipe.desc}
+//             title={recipe.title}
+//             profile={recipe.expand?.profile}
+//             keywords={recipe.keywords}
+//           />
+//         );
+//       return (
+//         <LargeCard
+//           key={index}
+//           id={recipe.id}
+//           userData={userData}
+//           rating={recipe.expand?.rating}
+//           url={recipe.image && url}
+//           desc={recipe.desc}
+//           title={recipe.title}
+//           profile={recipe.expand?.profile}
+//           keywords={recipe.keywords}
+//         />
+//       );
+//     })
+//   );
 
-  if (status === 'pending')
-    return (
-      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        <Skeleton />
-      </div>
-    );
+//   if (status === 'pending')
+//     return (
+//       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
+//         <Skeleton />
+//       </div>
+//     );
 
-  if (status === 'error')
-    return (
-      <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-        <Skeleton />
-      </div>
-    );
+//   if (status === 'error')
+//     return (
+//       <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
+//         <Skeleton />
+//       </div>
+//     );
 
-  return (
-    <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
-      {contents}
-      {isFetchingNextPage && <Skeleton />}
-    </div>
-  );
-}
+//   return (
+//     <div className="grid gap-6pxr pb-140pxr grid-cols-card justify-center w-full">
+//       {contents}
+//       {isFetchingNextPage && <Skeleton />}
+//     </div>
+//   );
+// }
 
 export function CategoryPage() {
   const { title } = useParams();
