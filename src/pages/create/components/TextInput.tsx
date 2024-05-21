@@ -1,5 +1,5 @@
 import { Required } from '@/components';
-import { TextInputProps } from '../create';
+import { TextInputProps } from '../../../types/create';
 import { useRef } from 'react';
 import { ErrorMessage } from '.';
 

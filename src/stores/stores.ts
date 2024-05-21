@@ -1,4 +1,4 @@
-import { recipeMainIntroductionProps } from '@/pages/create/create';
+import { recipeMainIntroductionProps } from '@/types/create';
 import { RecipesRatingExpand, MyNotification, MyReview } from '@/types';
 import { atom } from 'jotai';
 import { RecordModel } from 'pocketbase';
@@ -16,7 +16,7 @@ export const passwordAtom = atom(''); // 패스워드 입력값
 export const nicknameAtom = atom(''); // 닉네임 입력값
 
 // 생성 페이지 (temp_data는 삭제 예정)
-export const ingredients = atom([]);
+// export const ingredients = atom([]);
 export const seasoning = atom([]);
 export const recipeSteps = atom('[]');
 export const keywords = atom('');
@@ -31,8 +31,18 @@ export const time = atom(0); // 조리 시간
 export const difficulty = atom('쉬움'); // 난이도 선택
 export const modalError = atom(false); // 에러 발생 여부
 
-// 생성 페이지 atom 2
-export const recipeMainIntroductionAtom = atom();
+// 생성 페이지 atom
+export const recipeMainIntroductionAtom = atom<recipeMainIntroductionProps>({
+  image: null,
+  title: '',
+  desc: '',
+  keywords: '다이어트의 정석',
+  time: 10,
+  category: '건강식',
+  difficulty: '쉬움',
+  ingredients: [],
+  seasoning: [],
+});
 
 // 로그인 페이지
 export const isStore = atom(false); // 로컬저장소에 pocketbase_auth가 있는지 여부

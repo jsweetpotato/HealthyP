@@ -1,11 +1,21 @@
-import { Header, FooterButton, Footer, TwoButtonModal } from '@/components';
-import { FileInput, TextArea } from './components';
+// packages
 import { useAtom } from 'jotai';
 import { ChangeEventHandler, useState } from 'react';
-import { recipeSteps, step_images } from '@/stores/stores';
 import { useNavigate } from 'react-router-dom';
+
+// 유틸
 import { getRandomId } from '@/util/math/getRandomId';
-import { OneButtonModal } from '@/components/modal/OneButtonModal';
+
+// 컴포넌트
+import { Header, FooterButton, Footer, TwoButtonModal, OneButtonModal } from '@/components'; // 글로벌
+import { FileInput, FileInput2, TextArea, TextInput } from './components'; // 로컬
+
+// 아톰
+import { recipeSteps, step_images } from '@/stores/stores';
+import { useForm } from 'react-hook-form';
+import { RecipeStepFormProps } from '@/types/create';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { recipeStepSchema } from './schema';
 
 export function CreateThree() {
   const [steps, setSteps] = useAtom(recipeSteps);
@@ -17,7 +27,14 @@ export function CreateThree() {
   const [sizeAlert, setSizeAlert] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
-  
+
+  const { register, handleSubmit, formState } = useForm<RecipeStepFormProps>({
+    resolver: zodResolver(recipeStepSchema),
+    mode: 'onChange',
+  });
+
+  // form 에러
+  const { errors } = formState;
   const handleFileInput: ChangeEventHandler<HTMLInputElement> | undefined = (e) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) {
@@ -51,22 +68,13 @@ export function CreateThree() {
     navigate('../two');
   };
 
-
   return (
     <div className="flex flex-col h-full">
-      <Header
-        option="titlewithCloseAndFn"
-        title="레시피 스탭 추가하기"
-        handleClick={handleHeaderClick}
-      />
+      <Header option="titlewithCloseAndFn" title="레시피 스탭 추가하기" handleClick={handleHeaderClick} />
       <div className="flex flex-col px-16pxr py-14pxr grow w-full gap-42pxr pb-120pxr">
-        <FileInput
-          inputTitle="단계 이미지"
-          handleInput={handleFileInput}
-          required
-          preview={preview}
-        />
-        <TextArea
+        <FileInput inputTitle="단계 이미지" handleInput={handleFileInput} required preview={preview} />
+        <FileInput2 data={stepImages} preview="" id="recipe-step-img" register={register} error={errors.stepImg} />
+        {/* <TextArea
           required
           inputTitle="설명"
           maxCharCount={400}
@@ -78,6 +86,29 @@ export function CreateThree() {
           maxCharCount={400}
           setData={setTips}
           placeholderText="요리할 때 주의사항이나 팁을 입력해주세요"
+        /> */}
+
+        <TextInput
+          id="step-desc"
+          as="textarea"
+          title="설명"
+          maxLength={400}
+          register={register}
+          registerName="stepDesc"
+          error={errors.stepDesc}
+          placeholder="레시피 단계를 설명해주세요. (ex. 양파를 잘개 다집니다)"
+          required
+        />
+
+        <TextInput
+          id="step-tip"
+          as="textarea"
+          title="팁"
+          maxLength={400}
+          register={register}
+          registerName="stepTip"
+          error={errors.stepTip}
+          placeholder="레시피 팁을 설명해주세요."
         />
       </div>
       <Footer>

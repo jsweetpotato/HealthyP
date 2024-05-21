@@ -1,4 +1,4 @@
-import { SelectorProps } from '../create';
+import { SelectorProps } from '../../../types/create';
 import { Required } from '@/components';
 
 const inputStyle = 'bg-gray_150 rounded-[7px] px-10pxr py-8pxr placeholder:text-500 w-full';

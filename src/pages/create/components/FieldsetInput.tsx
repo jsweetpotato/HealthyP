@@ -1,4 +1,4 @@
-import { FieldsetInputProps } from '../create';
+import { FieldsetInputProps } from '../../../types/create';
 import { useFieldArray } from 'react-hook-form';
 import { ErrorMessage } from '.';
 import { Required } from '@/components';

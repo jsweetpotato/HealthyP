@@ -1,39 +1,10 @@
 import { useAtom, useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { db } from '@/api/pocketbase';
-import {
-  title,
-  ingredients,
-  description,
-  recipeSteps,
-  seasoning,
-  category,
-  keywords,
-  nutrition,
-  time,
-  difficulty,
-  step_images,
-  modalError,
-  image2,
-} from '@/stores/stores';
+import { recipeSteps, nutrition, step_images, modalError, recipeMainIntroductionAtom } from '@/stores/stores';
 
 import OpenAI from 'openai';
-interface RecipeData {
-  title: string;
-  ingredients: string;
-  seasoning: string;
-  steps: string;
-  views: number;
-  category: string;
-  keywords: string;
-  desc: string;
-  image: File | null;
-  nutrition: string | null;
-  rating: string[];
-  time: number;
-  difficulty: string;
-  profile: string;
-}
+import { RecipeData } from '@/types/create';
 
 interface UseUploadRecipeResult {
   uploadRecipe: () => void;
@@ -48,21 +19,21 @@ const openai = new OpenAI({
 });
 
 export default function useUploadRecipe(): UseUploadRecipeResult {
-  const [titleField] = useAtom(title);
-  const ingredientData = useAtomValue(ingredients);
-  const seasoningData = useAtomValue(seasoning);
-  const imageFile = useAtomValue(image2);
-  const categoryData = useAtomValue(category);
-  const keywordsData = useAtomValue(keywords);
-  const [nutritionData, setNutritionData] = useAtom(nutrition);
-  const descriptionText = useAtomValue(description);
+  // 레시피 메인 소개 아톰
+  const { title, desc, difficulty, image, ingredients, keywords, seasoning, time, category } =
+    useAtomValue(recipeMainIntroductionAtom);
+
+  // 레시피 스탭 아톰
   const steps = useAtomValue(recipeSteps);
+  const stepImages = useAtomValue(step_images);
+
+  // 영양정보 아톰
+  const [nutritionData, setNutritionData] = useAtom(nutrition);
+
   const [isLoading, setIsLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
-  const timeData = useAtomValue(time);
-  const difficultyData = useAtomValue(difficulty);
+
   const [userId, setUserId] = useState('');
-  const stepImages = useAtomValue(step_images);
   const [, setIsError] = useAtom(modalError);
 
   useEffect(() => {
@@ -70,7 +41,6 @@ export default function useUploadRecipe(): UseUploadRecipeResult {
     if (getPocketbaseAuthRaw) {
       const pocketbaseAuth = JSON.parse(getPocketbaseAuthRaw);
       const authUserId = pocketbaseAuth.model.id;
-      console.log(authUserId);
       setUserId(authUserId);
     }
   }, []);
@@ -86,7 +56,7 @@ export default function useUploadRecipe(): UseUploadRecipeResult {
           },
           {
             role: 'user',
-            content: `${ingredientData}, ${seasoningData} give me the nutritional information for these ingredients in a JSON format without any whitespaces. The key values should be in Korean. Make sure to add the unit for each data.`,
+            content: `${ingredients}, ${seasoning} give me the nutritional information for these ingredients in a JSON format without any whitespaces. The key values should be in Korean. Make sure to add the unit for each data.`,
           },
         ],
         model: 'gpt-3.5-turbo-0125',
@@ -107,25 +77,25 @@ export default function useUploadRecipe(): UseUploadRecipeResult {
   }
 
   async function uploadRecipe() {
-    if(imageFile === null) return;
+    if (image === null) return;
     try {
       await Promise.all([
         new Promise((resolve) => setTimeout(resolve, 3000)),
         (async () => {
           const data: RecipeData = {
-            title: titleField,
-            ingredients: JSON.stringify(ingredientData),
-            seasoning: JSON.stringify(seasoningData),
+            title,
+            desc,
+            category,
+            keywords,
+            time,
+            difficulty,
+            ingredients: JSON.stringify(ingredients),
+            seasoning: JSON.stringify(seasoning),
             steps: steps,
             views: 0,
-            category: categoryData,
-            keywords: keywordsData,
-            desc: descriptionText,
-            image: imageFile[0],
+            image: image[0],
             nutrition: nutritionData,
             rating: [],
-            time: timeData,
-            difficulty: difficultyData,
             profile: userId,
           };
           const record = await db.collection('recipes').create(data);

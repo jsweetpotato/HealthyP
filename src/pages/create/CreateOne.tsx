@@ -1,57 +1,51 @@
 // packages
-import { useNavigate } from 'react-router-dom';
+import { useAtom } from 'jotai';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
+
+// 조드
 import { zodResolver } from '@hookform/resolvers/zod';
-import { categories, difficult, schema } from './schema';
-import { FormValues } from './create';
-import { FieldsetInput, TextInput, Selector, FileInput2 } from './components';
-import { Header, OneButtonModal, TwoButtonModal } from '@/components';
-import { useAtom } from 'jotai';
-import {
-  category,
-  description,
-  difficulty,
-  image2,
-  ingredients,
-  keywords,
-  seasoning,
-  title,
-  time,
-} from '@/stores/stores';
+import { categories, difficult, recipeMainSchema } from './schema';
+
+// 타입
+import { RecipeMainFormProps } from '../../types/create';
+
+// 컴포넌트
+import { Header, OneButtonModal, TwoButtonModal } from '@/components'; // 글로벌
+import { FieldsetInput, TextInput, Selector, FileInput2 } from './components'; // 로컬
+
+// 아톰
+import { recipeMainIntroductionAtom } from '@/stores/stores';
 
 export function CreateOne() {
   const navigate = useNavigate();
+
   // atom
-  const [imageFile, setImageFile] = useAtom(image2);
-  const [titleField, setTitleField] = useAtom(title);
-  const [categoryField, setCategory] = useAtom(category);
-  const [keywordsField, setKeywords] = useAtom(keywords);
-  const [timeField, setTime] = useAtom(time);
-  const [seasoningField, setSeasoning] = useAtom(seasoning);
-  const [difficultField, setDifficulty] = useAtom(difficulty);
-  const [ingredientsField, setIngredient] = useAtom(ingredients);
-  const [descriptionField, setDescription] = useAtom(description);
+  const [recipeMainIntroduction, setRecipeMainIntroduction] = useAtom(recipeMainIntroductionAtom);
+
+  const { desc, difficulty, image, ingredients, keywords, seasoning, time, title, category } = recipeMainIntroduction;
 
   // state 상태관리
   const [sizeAlert, setSizeAlert] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   // form 제어
-  const { register, getValues, control, handleSubmit, formState } = useForm<FormValues>({
+  const { register, getValues, control, handleSubmit, formState } = useForm<RecipeMainFormProps>({
     defaultValues: {
-      recipeMainImg: imageFile,
-      recipeTitle: `${titleField || ''}`,
-      recipeDesc: `${descriptionField || ''}`,
-      keywords: `${keywordsField || ''}`,
-      time: `${timeField || ''}`,
-      category: `${categoryField || ''}`,
-      difficult: `${difficultField || ''}`,
-      ingredients: ingredientsField,
-      seasoning: seasoningField,
+      recipeMainImg: image || null,
+      recipeTitle: `${title || ''}`,
+      recipeDesc: `${desc || ''}`,
+      keywords: `${keywords || ''}`,
+      time: `${time || ''}`,
+      category: `${category || ''}`,
+      difficult: `${difficulty || ''}`,
+      ingredients: ingredients,
+      seasoning: seasoning,
     },
-    resolver: zodResolver(schema),
+
+    resolver: zodResolver(recipeMainSchema),
     mode: 'onChange',
   });
 
@@ -70,16 +64,20 @@ export function CreateOne() {
     navigate('/main');
   };
 
-  const onSubmit = (data: FormValues) => {
-    setImageFile(data.recipeMainImg);
-    setCategory(data.category);
-    setKeywords(data.keywords);
-    setTime(data.time);
-    setSeasoning(data.seasoning);
-    setDifficulty(data.difficult);
-    setIngredient(data.ingredients);
-    setDescription(data.recipeDesc.replace(/\n/g, '<br>'));
-    setTitleField(data.recipeTitle);
+  const onSubmit = (data: RecipeMainFormProps) => {
+    const submitData: RecipeMainFormProps = {
+      title: data.recipeTitle,
+      desc: data.recipeDesc,
+      image: data.recipeMainImg,
+      keywords: data.keywords,
+      time: data.time,
+      seasoning: data.seasoning,
+      ingredients: data.ingredients,
+      difficulty: data.difficult,
+      category: data.category,
+    };
+
+    setRecipeMainIntroduction(submitData);
     navigate('/create/two');
   };
 
@@ -91,13 +89,7 @@ export function CreateOne() {
       <Header option="titlewithCloseAndFn" title="레시피 등록하기" handleClick={handleHeaderClick} />
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
         <div className="px-14pxr flex flex-col gap-42pxr py-60pxr overflow-y-auto basis-6/7 ">
-          <FileInput2
-            data={imageFile}
-            preview=""
-            id="recipe-main-img"
-            register={register}
-            error={errors.recipeMainImg}
-          />
+          <FileInput2 data={image} preview="" id="recipe-main-img" register={register} error={errors.recipeMainImg} />
           <TextInput
             as="input"
             title="레시피 제목"
@@ -107,6 +99,7 @@ export function CreateOne() {
             error={errors.recipeTitle}
             registerName="recipeTitle"
             register={register}
+            required
           />
           <TextInput
             as="textarea"
@@ -117,6 +110,7 @@ export function CreateOne() {
             error={errors.recipeDesc}
             registerName="recipeDesc"
             register={register}
+            required
           />
           <TextInput
             as="input"
@@ -127,6 +121,7 @@ export function CreateOne() {
             error={errors.keywords}
             registerName="keywords"
             register={register}
+            required
           />
           <TextInput
             type="number"
@@ -138,6 +133,7 @@ export function CreateOne() {
             error={errors.time}
             registerName="time"
             register={register}
+            required
           />
           <Selector title="카테고리" id="category" optionList={categories} register={register} />
           <Selector title="난이도" id="difficult" optionList={difficult} register={register} />
